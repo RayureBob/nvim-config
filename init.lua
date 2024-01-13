@@ -295,6 +295,14 @@ require('lazy').setup({
   },
 
   {
+    "kdheepak/lazygit.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim"
+    }
+  },
+
+
+  {
     "jdonaldson/vaxe"
   },
 
@@ -368,7 +376,17 @@ vim.keymap.set('n', '<C-x>', function ()
   require("neo-tree.command").execute({ Action = "focus"})
 end, {desc = "focuses Neotree shortcut"})
 
+-- Execute LSP fix
 vim.keymap.set('n', '<C-s>', vim.lsp.buf.code_action, { desc = "Execute code action under cursor" })
+
+-- Lazygit
+vim.keymap.set('n', '<leader>gg', require'lazygit'.lazygit, { desc = "Open Lazy Git"})
+
+-- workspaces
+vim.keymap.set('n', '<leader>a', require'workspaces'.open, { desc = "Select a Workspace" })
+
+-- LSP open suggestion
+vim.keymap.set('n', '<C-a>', vim.lsp.buf.hover)
 
 
 -- [[ Highlight on yank ]]
