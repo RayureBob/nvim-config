@@ -1,7 +1,4 @@
 --[[
-
-
-
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
@@ -43,24 +40,15 @@ P.S. You can delete this when you're done too. It's your config now :)
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+
+require "plugins"
+
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  }
-end
-vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure plugins ]]
 -- NOTE: Here is where you install your plugins.
@@ -68,6 +56,7 @@ vim.opt.rtp:prepend(lazypath)
 --
 --  You can also configure plugins after the setup call,
 --  as they will be available in your neovim runtime.
+<<<<<<< main
 local l_config = { }
 local addc = function(data)
   l_config[#l_config+1] = data
@@ -202,6 +191,7 @@ addc {
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'select git hunk' })
       end,
     },
+<<<<<<< main
   }
 addc {
     -- Theme inspired by Atom
@@ -211,6 +201,23 @@ addc {
       vim.cmd.colorscheme 'srcery'
     end,
   }
+=======
+  },
+
+  {
+    -- Theme inspired by Atom
+    'navarasu/onedark.nvim',
+  },
+
+  --{'srcery-colors/srcery-vim'},
+
+  {
+    'nyoom-engineering/oxocarbon.nvim',
+    config = function()
+      vim.cmd.colorscheme 'oxocarbon'
+    end
+  },
+>>>>>>> WIP organisation
 
 addc {
     -- Set lualine as statusline
@@ -265,13 +272,25 @@ addc {
     build = ':TSUpdate',
   }
 
+<<<<<<< main
 addc {
+=======
+  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+  --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
+  --    up-to-date with whatever is in the kickstart repo.
+  --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+  --
+  --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
+  { import = 'custom.plugins' },
+  {
+>>>>>>> WIP organisation
     "nvim-neo-tree/neo-tree.nvim",
     branch="v3.x",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim"
+<<<<<<< main
     },
     config= function ()
       require("neo-tree").setup {
@@ -289,9 +308,27 @@ addc   {
       "nvim-lua/plenary.nvim"
     }
   }
+=======
+    }
+  },
+
+  {
+    "jdonaldson/vaxe"
+  },
+
+  {
+    "habamax/vim-godot"
+  },
+
+{
+},
+
+>>>>>>> WIP organisation
 
 
 require('lazy').setup { l_config }
+=======
+>>>>>>> WIP organisation
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -360,8 +397,6 @@ end, {desc = "focuses Neotree shortcut"})
 -- Execute LSP fix
 vim.keymap.set('n', '<C-s>', vim.lsp.buf.code_action, { desc = "Execute code action under cursor" })
 
--- Lazygit
-vim.keymap.set('n', '<leader>gg', require'lazygit'.lazygit, { desc = "Open Lazy Git"})
 
 -- workspaces
 vim.keymap.set('n', '<leader>a', require'workspaces'.open, { desc = "Select a Workspace" })
@@ -438,11 +473,11 @@ vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc =
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
+   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+      winblend = 10,
+     previewer = false,
   })
-end, { desc = '[/] Fuzzily search in current buffer' })
+  end, { desc = '[/] Fuzzily search in current buffer' })
 
 local function telescope_live_grep_open_files()
   require('telescope.builtin').live_grep {
@@ -582,6 +617,7 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
+<<<<<<< main
 
 -- document existing key chains
 -- register which-key VISUAL mode
@@ -607,6 +643,23 @@ wk.add(
     { "<leader>w_", hidden = true },
   }
 )
+=======
+require("which-key").add({
+  { lhs = "<leader>c", group = "[C]ode" },
+  { lhs = "<leader>d", group = "[D]ocument" },
+  { lhs = "<leader>g", group = "[G]it" },
+  { lhs = "<leader>h", group = "Git [H]unk" },
+  { lhs = "<leader>r", group = "[R]ename" },
+  { lhs = "<leader>s", group = "[S]earch" },
+  { lhs = "<leader>t", group = "[T]oggle" },
+  { lhs = "<leader>w", group = "[W]orkspace" },
+  { lhs = "<leader>", group = "VISUAL <leader>", mode = "v" },
+})
+-- register which-key VISUAL mode
+-- required for visual <leader>hs (hunk stage) to work
+
+
+>>>>>>> WIP organisation
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
@@ -692,7 +745,7 @@ cmp.setup {
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete {},
+    ['<C-s>'] = cmp.mapping.complete {'i', 'n'},
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
