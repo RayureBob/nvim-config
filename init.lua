@@ -41,7 +41,7 @@ P.S. You can delete this when you're done too. It's your config now :)
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 
-require "plugins"
+-- require "plugins"
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -56,21 +56,33 @@ vim.g.maplocalleader = ' '
 --
 --  You can also configure plugins after the setup call,
 --  as they will be available in your neovim runtime.
-<<<<<<< main
+
+local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system {
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', -- latest stable release
+    lazypath,
+  }
+end
+vim.opt.rtp:prepend(lazypath)
+
 local l_config = { }
-local addc = function(data)
+local add_config = function(data)
   l_config[#l_config+1] = data
 end
 
+add_config('tpope/vim-fugitive')
+add_config('tpope/vim-rhubarb')
+add_config('tpope/vim-sleuth')
 
-addc('tpope/vim-fugitive')
-addc('tpope/vim-rhubarb')
-addc('tpope/vim-sleuth')
+add_config { "jdonaldson/vaxe" }
+add_config { "habamax/vim-godot" }
 
-addc { "jdonaldson/vaxe" }
-addc { "habamax/vim-godot" }
-
-addc {
+add_config {
   -- LSP Configuration & Plugins
   'neovim/nvim-lspconfig',
   dependencies = {
@@ -87,7 +99,7 @@ addc {
   },
 }
 
-addc {
+add_config {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
@@ -104,7 +116,7 @@ addc {
     },
   }
 
-addc  {
+add_config  {
     "kylechui/nvim-surround",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
     event = "VeryLazy",
@@ -115,10 +127,10 @@ addc  {
     end
   }
 
-addc { 'natecraddock/workspaces.nvim' }
-addc { 'folke/which-key.nvim', opts = {} }
+add_config { 'natecraddock/workspaces.nvim' }
+add_config { 'folke/which-key.nvim', opts = {} }
 
-addc {
+add_config {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -191,9 +203,8 @@ addc {
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'select git hunk' })
       end,
     },
-<<<<<<< main
   }
-addc {
+add_config {
     -- Theme inspired by Atom
     'srcery-colors/srcery-vim',
     priority = 1000,
@@ -201,25 +212,8 @@ addc {
       vim.cmd.colorscheme 'srcery'
     end,
   }
-=======
-  },
 
-  {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-  },
-
-  --{'srcery-colors/srcery-vim'},
-
-  {
-    'nyoom-engineering/oxocarbon.nvim',
-    config = function()
-      vim.cmd.colorscheme 'oxocarbon'
-    end
-  },
->>>>>>> WIP organisation
-
-addc {
+add_config {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
@@ -233,7 +227,7 @@ addc {
     },
   }
 
-addc {
+add_config {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
@@ -241,9 +235,9 @@ addc {
     main = 'ibl',
     opts = {},
   }
-addc { 'numToStr/Comment.nvim', opts = {} }
+add_config { 'numToStr/Comment.nvim', opts = {} }
 
-addc {
+add_config {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
     dependencies = {
@@ -263,7 +257,7 @@ addc {
     },
   }
 
-addc {
+add_config {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
@@ -272,25 +266,13 @@ addc {
     build = ':TSUpdate',
   }
 
-<<<<<<< main
-addc {
-=======
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
-  --    up-to-date with whatever is in the kickstart repo.
-  --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  --
-  --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  { import = 'custom.plugins' },
-  {
->>>>>>> WIP organisation
+add_config {
     "nvim-neo-tree/neo-tree.nvim",
     branch="v3.x",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim"
-<<<<<<< main
     },
     config= function ()
       require("neo-tree").setup {
@@ -302,34 +284,15 @@ addc {
       }
     end
   }
-addc   {
+add_config   {
     "kdheepak/lazygit.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim"
     }
   }
-=======
-    }
-  },
-
-  {
-    "jdonaldson/vaxe"
-  },
-
-  {
-    "habamax/vim-godot"
-  },
-
-{
-},
-
->>>>>>> WIP organisation
 
 
 require('lazy').setup { l_config }
-=======
->>>>>>> WIP organisation
-
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -617,7 +580,6 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
-<<<<<<< main
 
 -- document existing key chains
 -- register which-key VISUAL mode
@@ -643,7 +605,6 @@ wk.add(
     { "<leader>w_", hidden = true },
   }
 )
-=======
 require("which-key").add({
   { lhs = "<leader>c", group = "[C]ode" },
   { lhs = "<leader>d", group = "[D]ocument" },
@@ -659,7 +620,6 @@ require("which-key").add({
 -- required for visual <leader>hs (hunk stage) to work
 
 
->>>>>>> WIP organisation
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
@@ -745,7 +705,7 @@ cmp.setup {
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-s>'] = cmp.mapping.complete {'i', 'n'},
+    ['<C-s>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
